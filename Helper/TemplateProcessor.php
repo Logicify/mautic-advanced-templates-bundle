@@ -16,17 +16,23 @@ class TemplateProcessor
      * @var \Twig_Environment
      */
     private $twigEnv;
+    private $twigDynamicContentLoader;
 
     private static $matchTwigBlockRegex = '/{%\s?TWIG_BLOCK\s?%}(.*?){%\s?END_TWIG_BLOCK\s?%}/ism';
 
     /**
      * TemplateProcessor constructor.
      * @param LoggerInterface $logger
+     * @param Twig_Loader_DynamicContent $twigDynamicContentLoader
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, Twig_Loader_DynamicContent $twigDynamicContentLoader)
     {
         $this->logger = $logger;
-        $this->twigEnv = new \Twig_Environment(new \Twig_Loader_Array([]));
+        $this->twigDynamicContentLoader = $twigDynamicContentLoader;
+        $logger->debug('TemplateProcessor: created $twigDynamicContentLoader');
+        $this->twigEnv = new \Twig_Environment(new \Twig_Loader_Chain([
+            $twigDynamicContentLoader, new \Twig_Loader_Array([])
+        ]));
         $this->configureTwig($this->twigEnv);
     }
 
@@ -36,8 +42,6 @@ class TemplateProcessor
      * @param array $lead
      * @return string
      * @throws \Throwable
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Syntax
      */
     public function processTemplate($content, $lead)
     {

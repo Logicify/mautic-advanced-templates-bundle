@@ -12,18 +12,26 @@ return [
                 'class'     => \MauticPlugin\MauticAdvancedTemplatesBundle\EventListener\EmailSubscriber::class,
                 'arguments' => [
                     'mautic.plugin.advanced_templates.helper.template_processor'
-                ],
-            ],
+                ]
+            ]
         ],
         'other' => [
             // Template processor
             'mautic.plugin.advanced_templates.helper.template_processor' => [
                 'class' => \MauticPlugin\MauticAdvancedTemplatesBundle\Helper\TemplateProcessor::class,
-                'tag' => 'advanced_templates',
                 'arguments' => [
                     'monolog.logger.mautic',
-                ],
+                    'mautic.plugin.advanced_templates.helper.twig_loader_dynamiccontent'
+                ]
+            ],
+            'mautic.plugin.advanced_templates.helper.twig_loader_dynamiccontent' => [
+                'class' => \MauticPlugin\MauticAdvancedTemplatesBundle\Helper\Twig_Loader_DynamicContent::class,
+                'arguments' => [
+                    'monolog.logger.mautic',
+                    'mautic.model.factory',
+                    'mautic.helper.dynamicContent'
+                ]
             ]
-        ],
-    ],
+        ]
+    ]
 ];
