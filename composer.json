@@ -1,0 +1,7 @@
+{
+  "name": "logicify/mautic-advanced-templates-bundle",
+  "type": "mautic-plugin",
+  "require": {
+    "mautic/composer-plugin": "^1.0"
+  }
+}
