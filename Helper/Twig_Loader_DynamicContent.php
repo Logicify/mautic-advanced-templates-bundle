@@ -4,7 +4,6 @@ namespace MauticPlugin\MauticAdvancedTemplatesBundle\Helper;
 
 use Mautic\CoreBundle\Factory\ModelFactory;
 use Mautic\DynamicContentBundle\Entity\DynamicContent;
-use Mautic\DynamicContentBundle\Helper\DynamicContentHelper;
 use Psr\Log\LoggerInterface;
 use Twig_Error_Loader;
 use Twig_Source;
@@ -21,23 +20,16 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
      * @var LoggerInterface
      */
     protected $logger;
-    /**
-     * @var DynamicContentHelper
-     */
-    private $dynamicContentHelper;
 
     /**
      * Twig_Loader_DynamicContent constructor.
      * @param LoggerInterface $logger
      * @param ModelFactory $modelFactory
-     * @param DynamicContentHelper $dynamicContentHelper
      */
-    public function __construct(LoggerInterface $logger, ModelFactory $modelFactory, DynamicContentHelper $dynamicContentHelper)
+    public function __construct(LoggerInterface $logger, ModelFactory $modelFactory)
     {
         $this->modelFactory = $modelFactory;
         $this->logger = $logger;
-        $this->dynamicContentHelper = $dynamicContentHelper;
-        $logger->debug('Twig_Loader_DynamicContent: created $twigDynamicContentLoader');
     }
 
 
@@ -65,7 +57,6 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
      *
      * @return string The cache key
      *
-     * @throws Twig_Error_Loader When $name is not found
      */
     public function getCacheKey($name)
     {
@@ -81,11 +72,11 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
      *
      * @return bool true if the template is fresh, false otherwise
      *
-     * @throws Twig_Error_Loader When $name is not found
      */
     public function isFresh($name, $time)
     {
         // TODO: Implement isFresh() method.
+        $this->logger->debug('Twig_Loader_DynamicContent: Is Fresh: ' . $time . ', ' . $name);
         return false;
     }
 
@@ -120,7 +111,6 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
     private function findTemplate($resourceAlias)
     {
         $model = $this->modelFactory->getModel('dynamicContent');
-        $this->logger->debug('Twig_Loader_DynamicContent: Loading dynamic content by alias: ' . $resourceAlias);
         $result = $model->getEntities(
             [
                 'filter' => [
@@ -155,7 +145,6 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
      */
     public function exists($name)
     {
-        $this->logger->debug('Twig_Loader_DynamicContent: EXISTS called for ' . $name);
         return $this->supports($name) && $this->findTemplate($this->aliasForTemplateName($name)) !== null;
     }
 

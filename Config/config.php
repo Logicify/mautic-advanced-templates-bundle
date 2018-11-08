@@ -28,8 +28,7 @@ return [
                 'class' => \MauticPlugin\MauticAdvancedTemplatesBundle\Helper\Twig_Loader_DynamicContent::class,
                 'arguments' => [
                     'monolog.logger.mautic',
-                    'mautic.model.factory',
-                    'mautic.helper.dynamicContent'
+                    'mautic.model.factory'
                 ]
             ]
         ]

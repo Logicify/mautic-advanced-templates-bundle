@@ -34,7 +34,6 @@ class EmailSubscriber extends CommonSubscriber
      */
     public static function getSubscribedEvents()
     {
-        $a = 1 / 0;
         return [
             EmailEvents::EMAIL_ON_SEND => ['onEmailGenerate', 0],
             EmailEvents::EMAIL_ON_DISPLAY => ['onEmailGenerate', 0]
