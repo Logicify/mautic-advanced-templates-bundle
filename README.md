@@ -26,11 +26,11 @@ There is a high possibility it is compatible with other environments, but we nev
 ### Features
 
 * TWIG templates could be used in the emails. Just create am email and put your TWIG template between special tags:
-```twig
-{% TWIG_BLOCK %} 
-Your template TWIG goes here....                                        
-{% END_TWIG_BLOCK %}
-```
+    ```twig
+    {% TWIG_BLOCK %} 
+    Your template TWIG goes here....                                        
+    {% END_TWIG_BLOCK %}
+    ```
 * Reusable TWIG snippets could be loaded form Dynamic content entities.
 * TWIG extended with some useful functions and filters (see below).
 
@@ -64,8 +64,6 @@ Table below explains which variables are exposed to the context. Also it holds t
 | ----------- | -------- | ---------------------------------------- | ---------------------------------------- |
 | lead        | Variable | Holds a Lead entity (contact). You should refer fields by alias name (see example). | `{{lead.firstname}}`, `{{lead.country}}` |
 | json_decode | Filter   | Converts string in JSON format into object. | `{% set cart = lead.cart | json_decode %}` In this sample we declare variable `cart` which will hold deserialized cart. |
-|             |          |                                          |                                          |
-
 
 
 ### Example 1: Basic scenario
@@ -75,16 +73,16 @@ Let's say you'd like to add an extra paragraph about weather in New York for peo
 1. Navigate to the Channels / Emails / New / Builder
 2. Open the editor for the slot you need to update (Source code mode is preferable)
 3. Put the following inside your template:
-```twig
-{% TWIG_BLOCK %} 
-    <p>Hi {{lead.firstname}},</p>
-    {% if lead.city == 'New York' %}
-        <p>What a great weather is in New York this week!</p>
-    {% endif %}
-    
-    <p>Main letter content goes here</p>         
-{% END_TWIG_BLOCK %}
-```
+    ```twig
+    {% TWIG_BLOCK %} 
+        <p>Hi {{lead.firstname}},</p>
+        {% if lead.city == 'New York' %}
+            <p>What a great weather is in New York this week!</p>
+        {% endif %}
+        
+        <p>Main letter content goes here</p>         
+    {% END_TWIG_BLOCK %}
+    ```
 
 ### Example 2: Rendering structured data
 
@@ -115,6 +113,34 @@ Thus, in order to render all items you should code something like this:
     </ul>             
 {% END_TWIG_BLOCK %}
 ```
+
+### Example 3: Reusable code snipets
+
+It might happen you need similar blocks to to be included into multiple emails. In this case it is good idea to improve
+maintainability and keep common pieces in one single place. The solution this bundle proposes it to leverage 
+Dynamic Content entity and TWIG built-in function `include()`. 
+
+Let's imaging the previous example but move template for rendering one single item in reusable snippet.
+
+1. Navigate to Components / Dynamic Content
+1. Create new entity with name `email-cart-item`.
+1. Put the following into Content area:
+    ```twig
+    <li>Sku: {{ item.sku }}, Name: {{ item.name }}.</li>
+    ```
+1. Update your email template with the following:
+    ```twig
+    {% TWIG_BLOCK %} 
+        {% set cart = lead.cart | json_decode %}     
+        Your cart:
+        <ul> 
+        {% for item in cart %}
+          {{ include('dc:email-cart-item') }}
+        {% endfor %}
+        </ul>             
+    {% END_TWIG_BLOCK %}
+    ```
+    Notice prefix `dc:` which instructs template resolver to look for dynamic content instance.
 
 ## Credits
 
