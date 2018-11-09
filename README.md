@@ -144,7 +144,7 @@ Let's imaging the previous example but move template for rendering one single it
 
 ## Credits
 
-Dmitry Berezovsky, Logicify (http://logicify.com/)
+Dmitry Berezovsky, Logicify ([http://logicify.com/](https://logicify.com/?utm_source=github&utm_campaign=mautic-templates&utm_medium=opensource))
 
 ## Disclaimer
 
