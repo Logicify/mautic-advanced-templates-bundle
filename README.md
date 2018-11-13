@@ -25,7 +25,7 @@ There is a high possibility it is compatible with other environments, but we nev
 
 ### Features
 
-* TWIG templates could be used in the emails. Just create am email and put your TWIG template between special tags:
+* TWIG templates could be used in the emails. Just create an email and put your TWIG template between special tags:
     ```twig
     {% TWIG_BLOCK %} 
     Your template TWIG goes here....                                        
@@ -45,7 +45,7 @@ There is a high possibility it is compatible with other environments, but we nev
 
 ## Usage
 
-Once installed plugin is read to be used (no configuration required).
+Once installed plugin is ready to be used (no configuration required).
 Shortly saying, the text between `{% TWIG_BLOCK %}` and `{% END_TWIG_BLOCK %}` in your emails will be treated as TWIG 
 template. Please check out [TWIG official documentation](https://twig.symfony.com/doc/2.x/templates.html) to 
 familiarize yourself with syntax and capabilities.
@@ -116,8 +116,8 @@ Thus, in order to render all items you should code something like this:
 
 ### Example 3: Reusable code snipets
 
-It might happen you need similar blocks to to be included into multiple emails. In this case it is good idea to improve
-maintainability and keep common pieces in one single place. The solution this bundle proposes it to leverage 
+It might happen you need similar blocks to be included into multiple emails. In this case it is good idea to improve
+maintainability and keep common pieces in one single place. The solution this bundle proposes is to leverage 
 Dynamic Content entity and TWIG built-in function `include()`. 
 
 Let's imaging the previous example but move template for rendering one single item in reusable snippet.
