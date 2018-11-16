@@ -1,18 +1,12 @@
 # Mautic Advanced Templates Bundle
 
-Plugin extends default email template capabilities with TWIG block so you can use advanced templating 
-techniques like conditions, loops etc.
+Plugin extends default email template capabilities with TWIG block so you can use advanced templating techniques like conditions, loops etc.
 
 ### Purpose
 
-For example you need slightly different content of your email depending on the information you already know about 
-your contact (e.g. country, gender, whatever). Instead of creating tons of very similar emails you can create one with 
-conditions coded inside.
+For example, you need a slightly different content of your email depending on the information you already know about your contact (e.g., country, gender, whatever). Instead of creating tons of very similar emails, you can create one with conditions coded inside.
 
-Another example - you might want to include dynamic content to your email. For let's say you are implementing 
-abandoned cart feature and you want your customers to see exact content of their cart. Again, the solution might be to 
-push cart content in JSON format to your contact via API and then iterate through the items in your template to render
-picture, name and price for each one.
+Another example: you might want to include dynamic content to your email. Let's say you are implementing an Abandoned Cart feature and you want your customers to see exact content of their cart. Again, the solution might be to push cart content in JSON format to your contact via API and then iterate through the items in your template to render picture, name and price for each one.
 
 ### Compatibility
 
@@ -21,7 +15,7 @@ This plugin was tested with:
 * Mautic v2.14.2
 * PHP v7.1.23
 
-There is a high possibility it is compatible with other environments, but we never tested it.
+There is a high probability it is compatible with other environments, but we never tested it.
 
 ### Features
 
@@ -31,7 +25,7 @@ There is a high possibility it is compatible with other environments, but we nev
     Your template TWIG goes here....                                        
     {% END_TWIG_BLOCK %}
     ```
-* Reusable TWIG snippets could be loaded form Dynamic content entities.
+* Reusable TWIG snippets could be loaded form Dynamic Content entities.
 * TWIG extended with some useful functions and filters (see below).
 
 ## Installation
@@ -45,20 +39,16 @@ There is a high possibility it is compatible with other environments, but we nev
 
 ## Usage
 
-Once installed plugin is ready to be used (no configuration required).
-Shortly saying, the text between `{% TWIG_BLOCK %}` and `{% END_TWIG_BLOCK %}` in your emails will be treated as TWIG 
-template. Please check out [TWIG official documentation](https://twig.symfony.com/doc/2.x/templates.html) to 
-familiarize yourself with syntax and capabilities.
+Once installed, the plugin is ready to be used (no configuration required).
+Shortly saying, the text between `{% TWIG_BLOCK %}` and `{% END_TWIG_BLOCK %}` in your emails will be treated as a TWIG template. Please check out [TWIG official documentation](https://twig.symfony.com/doc/2.x/templates.html) to familiarize yourself with syntax and capabilities.
 
-You can also make avoid lot of copy-and-paste with `include()` function available in templates. Just put reusable 
-pieces of templates into Dynamic Content entity and use refer it in your main email templates (see examples below). 
+You can also avoid lots of copy-and-paste with `include()` function available in templates. Just put reusable pieces of templates into Dynamic Content entity and use it in your main email templates (see examples below). 
 
-Note: The context will be shared with included template so each variable available outside will be available in the 
-included snippet.   
+Note: The context will be shared with included template so each variable available outside will be available in the included snippet.   
 
 ### Context
 
-Table below explains which variables are exposed to the context. Also it holds the list of extra functions and filters available. Please note, all standard library of tags\filter\functions as per official TWIG documents is available as well.
+The table below explains which variables are exposed to the context. Also it contains the list of extra functions and filters available. Please note that all standard library of tags\filter\functions as per official TWIG documents is available as well.
 
 | Entity      | Type     | Description                              | Example                                  |
 | ----------- | -------- | ---------------------------------------- | ---------------------------------------- |
@@ -86,10 +76,9 @@ Let's say you'd like to add an extra paragraph about weather in New York for peo
 
 ### Example 2: Rendering structured data
 
-Imaging you need to remind your prospect about incomplete purchase (abandoned cart feature).
+Imaging you need to remind your prospect about incomplete purchase (Abandoned Cart feature).
 
-We assume you have an integration with your e-commerce software which pushes cart information into Mautic contact 
-entity in the custom field `cart`. 
+We assume you have an integration with your e-commerce software which pushes cart information into Mautic contact entity in the custom field `cart`. 
 
 Assume cart information is JSON and has the following format:
 
@@ -100,7 +89,7 @@ Assume cart information is JSON and has the following format:
   ]
 ```
 
-Thus, in order to render all items you should code something like this: 
+Thus, in order to render all items, you should code something like this: 
 
 ```twig
 {% TWIG_BLOCK %} 
@@ -114,13 +103,11 @@ Thus, in order to render all items you should code something like this:
 {% END_TWIG_BLOCK %}
 ```
 
-### Example 3: Reusable code snipets
+### Example 3: Reusable code snippets
 
-It might happen you need similar blocks to be included into multiple emails. In this case it is good idea to improve
-maintainability and keep common pieces in one single place. The solution this bundle proposes is to leverage 
-Dynamic Content entity and TWIG built-in function `include()`. 
+It might happen you need similar blocks to be included into multiple emails. In this case, it is a good idea to improve maintainability and keep common pieces in a single place. The solution this bundle offers is to leverage Dynamic Content entity and TWIG built-in function `include()`. 
 
-Let's imaging the previous example but move template for rendering one single item in reusable snippet.
+Let's continue with the previous example but turn template for rendering a single item into a reusable snippet.
 
 1. Navigate to Components / Dynamic Content
 1. Create new entity with name `email-cart-item`.
@@ -148,7 +135,7 @@ Dmitry Berezovsky, Logicify ([http://logicify.com/](https://logicify.com/?utm_so
 
 ## Disclaimer
 
-This plug-in is licensed under MIT. This means you are free to use it even in commercial project.
+This plug-in is licensed under MIT. This means you are free to use it even in commercial projects.
 
 The MIT license clearly explains that there is no warranty for this free software. 
 Please see the included [LICENSE](LICENSE) file for details.
