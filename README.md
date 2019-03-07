@@ -134,28 +134,28 @@ Let's continue with the previous example but turn template for rendering a singl
 ### Example 4: RSS support
     
     
-    ```twig
-    {% TWIG_BLOCK %} 
-        {% set items = 'http://domain.tld/feed/' | rss %}     
-        <ul> 
-        {% for item in cart %}
-            <li>
-             <a href=''{{ item.link }}'>{{ item.title }}</a> ({{ item.pubDate|date('m/d/Y') }})
-             <br />{{ item.description|raw }}
-             </li>
-        {% endfor %}
-        </ul>             
-    {% END_TWIG_BLOCK %}
-    ```
+```twig
+     {% TWIG_BLOCK %} 
+          {% set items = 'http://domain.tld/feed/' | rss %}     
+          <ul> 
+          {% for item in items %}
+              <li>
+               <a href=''{{ item.link }}'>{{ item.title }}</a> ({{ item.pubDate|date('m/d/Y') }})
+               <br />{{ item.description|raw }}
+               </li>
+          {% endfor %}
+          </ul>             
+      {% END_TWIG_BLOCK %}
+```
         
     
  ### Example 5: RSS related categories to contact's segments
         
-        ```twig
+```twig
         {% TWIG_BLOCK %} 
             {% set items = 'http://domain.tld/feed/' | rss('segments') %}     
             <ul> 
-            {% for item in cart %}
+            {% for item in items %}
                 <li>
                  <a href=''{{ item.link }}'>{{ item.title }}</a> ({{ item.pubDate|date('m/d/Y') }})
                  <br />{{ item.description|raw }}
@@ -163,7 +163,7 @@ Let's continue with the previous example but turn template for rendering a singl
             {% endfor %}
             </ul>             
         {% END_TWIG_BLOCK %}
-        ```
+```
 
 ## Credits
 
