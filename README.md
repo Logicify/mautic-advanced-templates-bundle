@@ -131,8 +131,7 @@ Let's continue with the previous example but turn template for rendering a singl
     ```
     Notice prefix `dc:` which instructs template resolver to look for dynamic content instance.
     
-### Example 4: RSS support
-    
+### Example 4: RSS support    
     
 ```twig
      {% TWIG_BLOCK %} 
@@ -149,7 +148,12 @@ Let's continue with the previous example but turn template for rendering a singl
 ```
         
     
- ### Example 5: RSS related categories to contact's segments
+ ### Example 5: RSS related items to contact's segments
+
+- Add one or more categories to item 
+https://www.w3schools.com/xml/rss_tag_category_item.asp 
+- Each contact receive personalized items based on segment assignemnt.
+- Matching between item categories and segment aliases
         
 ```twig
         {% TWIG_BLOCK %} 
