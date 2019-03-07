@@ -77,7 +77,6 @@ class TemplateProcessor
         }));
 
         $twig->addFilter(new \Twig_SimpleFilter('rss', function () {
-            $this->lead['id'] = 22833;
             return $this->feedFactory->getItems($this->lead['id'], func_get_args());
         }));
     }
