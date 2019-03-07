@@ -2,6 +2,8 @@
 
 namespace MauticPlugin\MauticAdvancedTemplatesBundle\Helper;
 
+use MauticPlugin\MauticAdvancedTemplatesBundle\Feed\FeedFactory;
+use MauticPlugin\MauticCrmBundle\Integration\Salesforce\Object\Lead;
 use Psr\Log\LoggerInterface;
 
 class TemplateProcessor
@@ -20,12 +22,22 @@ class TemplateProcessor
 
     private static $matchTwigBlockRegex = '/{%\s?TWIG_BLOCK\s?%}(.*?){%\s?END_TWIG_BLOCK\s?%}/ism';
 
+    /** @var  array */
+    private $lead;
+
+    /**
+     * @var FeedFactory
+     */
+    private $feedFactory;
+
     /**
      * TemplateProcessor constructor.
-     * @param LoggerInterface $logger
+     *
+     * @param LoggerInterface            $logger
      * @param Twig_Loader_DynamicContent $twigDynamicContentLoader
+     * @param FeedFactory                $feedFactory
      */
-    public function __construct(LoggerInterface $logger, Twig_Loader_DynamicContent $twigDynamicContentLoader)
+    public function __construct(LoggerInterface $logger, Twig_Loader_DynamicContent $twigDynamicContentLoader, FeedFactory $feedFactory)
     {
         $this->logger = $logger;
         $this->twigDynamicContentLoader = $twigDynamicContentLoader;
@@ -34,6 +46,7 @@ class TemplateProcessor
             $twigDynamicContentLoader, new \Twig_Loader_Array([])
         ]));
         $this->configureTwig($this->twigEnv);
+        $this->feedFactory = $feedFactory;
     }
 
 
@@ -62,10 +75,16 @@ class TemplateProcessor
         $twig->addFilter(new \Twig_SimpleFilter('json_decode', function ($string) {
             return json_decode($string, true);
         }));
+
+        $twig->addFilter(new \Twig_SimpleFilter('rss', function () {
+            $this->lead['id'] = 22833;
+            return $this->feedFactory->getItems($this->lead['id'], func_get_args());
+        }));
     }
 
     private function processTwigBlock($lead)
     {
+        $this->lead = $lead;
         return function ($matches) use ($lead) {
             $templateSource = $matches[1];
             $this->logger->debug('BLOCK SOURCE: ' . var_export($templateSource, true));

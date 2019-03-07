@@ -21,7 +21,8 @@ return [
                 'class' => \MauticPlugin\MauticAdvancedTemplatesBundle\Helper\TemplateProcessor::class,
                 'arguments' => [
                     'monolog.logger.mautic',
-                    'mautic.plugin.advanced_templates.helper.twig_loader_dynamiccontent'
+                    'mautic.plugin.advanced_templates.helper.twig_loader_dynamiccontent',
+                    'mautic.plugin.advanced_templates.helper.feed_factory'
                 ]
             ],
             'mautic.plugin.advanced_templates.helper.twig_loader_dynamiccontent' => [
@@ -30,7 +31,20 @@ return [
                     'monolog.logger.mautic',
                     'mautic.model.factory'
                 ]
-            ]
+            ],
+            'mautic.plugin.advanced_templates.helper.feed_factory' => [
+                'class' => \MauticPlugin\MauticAdvancedTemplatesBundle\Feed\FeedFactory::class,
+                'arguments' => [
+                    'mautic.plugin.advanced_templates.helper.feed_processor'
+                ]
+            ],
+            'mautic.plugin.advanced_templates.helper.feed_processor' => [
+                'class' => \MauticPlugin\MauticAdvancedTemplatesBundle\Feed\FeedProcessor::class,
+                'arguments' => [
+                    'mautic.lead.model.lead',
+                ]
+            ],
+
         ]
     ]
 ];
