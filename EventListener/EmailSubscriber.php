@@ -5,6 +5,7 @@ use Mautic\CampaignBundle\Entity\Lead;
 use Mautic\CoreBundle\EventListener\CommonSubscriber;
 use Mautic\EmailBundle\EmailEvents;
 use Mautic\EmailBundle\Event as Events;
+use Mautic\EmailBundle\Helper\PlainTextHelper;
 use Mautic\CoreBundle\Exception as MauticException;
 use MauticPlugin\MauticAdvancedTemplatesBundle\Helper\TemplateProcessor;
 use Psr\Log\LoggerInterface;
@@ -54,5 +55,8 @@ class EmailSubscriber extends CommonSubscriber
         $content = $event->getContent();
         $content = $this->templateProcessor->processTemplate($content,  $event->getLead());
         $event->setContent($content);
+        if ( empty( trim($event->getPlainText()) ) ) {
+            $event->setPlainText( (new PlainTextHelper($content))->getText() );
+        }
     }
 }
