@@ -52,19 +52,6 @@ class EmailSubscriber extends CommonSubscriber
     {
         $this->logger->info('onEmailGenerate MauticAdvancedTemplatesBundle\EmailSubscriber');
         $content = $event->getContent();
-        $content .= "
-        {% TWIG_BLOCK %} 
-  {% set items = 'http://mautic.test/feed.rss' | rss('segments') %}  
-   <ul>
- {% for item in items %}
-          <li>  
-          <a href=''{{ item.link }}'>{{ item.title }}</a> ({{ item.pubDate|date('m/d/Y') }})
-          <br />{{ item.description|raw }}
-          </li>
-    {% endfor %}
-    </ul>
-{% END_TWIG_BLOCK %}
-        ";
         $content = $this->templateProcessor->processTemplate($content,  $event->getLead());
         $event->setContent($content);
     }
