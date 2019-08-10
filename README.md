@@ -27,6 +27,8 @@ There is a high probability it is compatible with other environments, but we nev
     ```
 * Reusable TWIG snippets could be loaded form Dynamic Content entities.
 * TWIG extended with some useful functions and filters (see below).
+* RSS support
+* RSS items related to contact's segment preferences center and RSS category    
 
 ## Installation
 
@@ -128,6 +130,44 @@ Let's continue with the previous example but turn template for rendering a singl
     {% END_TWIG_BLOCK %}
     ```
     Notice prefix `dc:` which instructs template resolver to look for dynamic content instance.
+    
+### Example 4: RSS support    
+    
+```twig
+     {% TWIG_BLOCK %} 
+          {% set items = 'http://domain.tld/feed/' | rss %}     
+          <ul> 
+          {% for item in items %}
+              <li>
+               <a href=''{{ item.link }}'>{{ item.title }}</a> ({{ item.pubDate|date('m/d/Y') }})
+               <br />{{ item.description|raw }}
+               </li>
+          {% endfor %}
+          </ul>             
+      {% END_TWIG_BLOCK %}
+```
+        
+    
+ ### Example 5: RSS related items to contact's segments
+
+- Add one or more categories to item 
+https://www.w3schools.com/xml/rss_tag_category_item.asp 
+- Each contact receive personalized items based on segment assignemnt.
+- Matching between item categories and segment aliases
+        
+```twig
+        {% TWIG_BLOCK %} 
+            {% set items = 'http://domain.tld/feed/' | rss('segments') %}     
+            <ul> 
+            {% for item in items %}
+                <li>
+                 <a href=''{{ item.link }}'>{{ item.title }}</a> ({{ item.pubDate|date('m/d/Y') }})
+                 <br />{{ item.description|raw }}
+                 </li>
+            {% endfor %}
+            </ul>             
+        {% END_TWIG_BLOCK %}
+```
 
 ## Credits
 
