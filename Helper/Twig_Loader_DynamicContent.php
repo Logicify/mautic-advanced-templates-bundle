@@ -133,9 +133,13 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
         if (count($result) === 0) {
             return null;
         }
-        return $result[1]; // Strange, but result is in the element 1 not 0...
-    }
 
+        /**** The result array key is the dynamic content ID - So use array_keys and get the first (and only) found key  ****/
+        $keys = array_keys($result);     
+        
+        return $result[$keys[0]]; 
+    }
+    
     /**
      * Check if we have the source code of a template, given its name.
      *
