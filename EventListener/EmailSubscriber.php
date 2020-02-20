@@ -52,8 +52,10 @@ class EmailSubscriber extends CommonSubscriber
     public function onEmailGenerate(Events\EmailSendEvent $event)
     {
         $this->logger->info('onEmailGenerate MauticAdvancedTemplatesBundle\EmailSubscriber');
-        $content = $event->getEmail()->getCustomHtml();
-        $content = $this->templateProcessor->processTemplate($content,  $event->getLead());
+        $subject = $this->templateProcessor->processTemplate($event->getEmail()->getSubject(),  $event->getLead());
+        $event->setSubject($subject);
+
+        $content = $this->templateProcessor->processTemplate($event->getEmail()->getCustomHtml(),  $event->getLead());
         $event->setContent($content);
         if ( empty( trim($event->getPlainText()) ) ) {
             $event->setPlainText( (new PlainTextHelper($content))->getText() );
