@@ -32,7 +32,7 @@ There is a high probability it is compatible with other environments, but we nev
 
 ## Installation
 
-1. Download or clone this bundle into your Mautic `/plugins` folder. Make sure the name of the folder containing plugin files is `MauticAdvancedTemplatesBundle` (case sensitive). Rename it if it isn't, otherwise it will not be recognized.
+1. Download or clone this bundle into your Mautic `/plugins` folder. **Make sure the name of the folder containing plugin files is** `MauticAdvancedTemplatesBundle` (case sensitive). Rename it if it isn't, otherwise it will not be recognized.
 2. Delete your cache (`app/cache/prod`).
 3. In the Mautic GUI, go to the gear and then to Plugins.
 4. Click "Install/Upgrade Plugins".
