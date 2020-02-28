@@ -26,9 +26,10 @@ class EmailSubscriber extends CommonSubscriber
      *
      * @param TokenHelper $tokenHelper
      */
-    public function __construct(TemplateProcessor $templateProcessor)
+    public function __construct(TemplateProcessor $templateProcessor, ModelFactory $modelFactory)
     {
         $this->templateProcessor = $templateProcessor;
+        $this->modelFactory = $modelFactory;
     }
     /**
      * @return array
@@ -53,6 +54,17 @@ class EmailSubscriber extends CommonSubscriber
     {
         $this->logger->info('onEmailGenerate MauticAdvancedTemplatesBundle\EmailSubscriber');
 
+        $lead = $event->getLead();
+        $model = $this->modelFactory->getModel('lead');
+        $leadmodel = $model->getEntity($lead['id']);
+        $lead['tags'] = [];
+
+        if ($leadmodel && count($leadmodel->getTags()) > 0) {
+            foreach ($leadmodel->getTags() as $tag) {
+                $lead['tags'][] = $tag->getTag();
+            }
+        }
+
         if ($event->getEmail()) {
             $subject = $event->getEmail()->getSubject();
             $content = $event->getEmail()->getCustomHtml();
@@ -61,10 +73,10 @@ class EmailSubscriber extends CommonSubscriber
             $content = $event->getContent();
         }
 
-        $subject = $this->templateProcessor->processTemplate($subject,  $event->getLead());
+        $subject = $this->templateProcessor->processTemplate($subject,  $lead);
         $event->setSubject($subject);
 
-        $content = $this->templateProcessor->processTemplate($content,  $event->getLead());
+        $content = $this->templateProcessor->processTemplate($content,  $lead);
         $event->setContent($content);
 
 
