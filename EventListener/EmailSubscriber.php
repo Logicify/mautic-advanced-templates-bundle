@@ -60,11 +60,16 @@ class EmailSubscriber extends CommonSubscriber
             $subject = $event->getSubject();
             $content = $event->getContent();
         }
+        $originalTokens = $event->getTokens();
+        $tokens = [];
+        foreach($originalTokens as $k => $v) {
+            $tokens[preg_replace('/^{(.*)}$/', '${1}', $k)] = $v;
+        }
 
-        $subject = $this->templateProcessor->processTemplate($subject,  $event->getLead());
+        $subject = $this->templateProcessor->processTemplate($subject,  $event->getLead(), $tokens);
         $event->setSubject($subject);
 
-        $content = $this->templateProcessor->processTemplate($content,  $event->getLead());
+        $content = $this->templateProcessor->processTemplate($content,  $event->getLead(), $tokens);
         $event->setContent($content);
 
 

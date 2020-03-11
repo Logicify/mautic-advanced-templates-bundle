@@ -25,6 +25,9 @@ class TemplateProcessor
     /** @var  array */
     private $lead;
 
+    /** @var  array */
+    private $tokens;
+
     /**
      * @var FeedFactory
      */
@@ -60,8 +63,9 @@ class TemplateProcessor
     {
         $this->logger->debug('TemplateProcessor: Processing template');
         $this->logger->debug('LEAD: ' . var_export($lead, true));
+        $this->logger->debug('TOKENS: ' . var_export($tokens, true));
         $content = preg_replace_callback_array([
-            TemplateProcessor::$matchTwigBlockRegex => $this->processTwigBlock($lead)
+            TemplateProcessor::$matchTwigBlockRegex => $this->processTwigBlock($lead, $tokens)
         ], $content);
         $this->logger->debug('TemplateProcessor: Template processed');
         return $content;
@@ -81,16 +85,17 @@ class TemplateProcessor
         }));
     }
 
-    private function processTwigBlock($lead)
+    private function processTwigBlock($lead, $tokens)
     {
         $this->lead = $lead;
-        return function ($matches) use ($lead) {
+        $this->tokens = $tokens;
+        return function ($matches) use ($lead, $tokens) {
             $templateSource = $matches[1];
             $this->logger->debug('BLOCK SOURCE: ' . var_export($templateSource, true));
             $template = $this->twigEnv->createTemplate($templateSource);
-            $renderedTemplate = $template->render([
+            $renderedTemplate = $template->render(array_merge($tokens, [
                 'lead' => $lead
-            ]);
+            ]));
             $this->logger->debug('RENDERED BLOCK: ' . var_export($renderedTemplate, true));
             return $renderedTemplate;
         };

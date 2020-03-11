@@ -8,6 +8,8 @@ For example, you need a slightly different content of your email depending on th
 
 Another example: you might want to include dynamic content to your email. Let's say you are implementing an Abandoned Cart feature and you want your customers to see exact content of their cart. Again, the solution might be to push cart content in JSON format to your contact via API and then iterate through the items in your template to render picture, name and price for each one.
 
+Alternatively, if you are sending emails through the API (e.g., POST to `/api/emails/42/contact/100/send`), you can use the `tokens` feature to supply arbitrary text or objects that Twig can process. See example below. 
+
 ### Compatibility
 
 This plugin was tested with:
@@ -105,7 +107,32 @@ Thus, in order to render all items, you should code something like this:
 {% END_TWIG_BLOCK %}
 ```
 
-### Example 3: Reusable code snippets
+### Example 3: Rendering structured data from tokens
+
+Instead of pushing data to a custom field, you can specify dynamic data when using the Email Send API. When making the API call, set your POST body to a JSON object including a `tokens` key like below:
+
+```json
+{
+    "tokens": {
+        "{cart}": [{"sku":"A100","name":"Item 1"},{"sku":"Z200","name":"Item 2"}]
+    }
+}
+```
+
+To render, code something like this:
+
+```twig
+{% TWIG_BLOCK %}
+  Your cart:
+  <ul>
+  {% for item in cart %}
+    <li>Item Name: {{ item.name }} (SKU: {{ item.sku }})</li>
+  {% endfor %}
+  </ul>
+{% END_TWIG_BLOCK %}
+```
+
+### Example 4: Reusable code snippets
 
 It might happen you need similar blocks to be included into multiple emails. In this case, it is a good idea to improve maintainability and keep common pieces in a single place. The solution this bundle offers is to leverage Dynamic Content entity and TWIG built-in function `include()`. 
 
@@ -131,7 +158,7 @@ Let's continue with the previous example but turn template for rendering a singl
     ```
     Notice prefix `dc:` which instructs template resolver to look for dynamic content instance.
     
-### Example 4: RSS support    
+### Example 5: RSS support    
     
 ```twig
      {% TWIG_BLOCK %} 
@@ -148,7 +175,7 @@ Let's continue with the previous example but turn template for rendering a singl
 ```
         
     
- ### Example 5: RSS related items to contact's segments
+### Example 6: RSS related items to contact's segments
 
 - Add one or more categories to item 
 https://www.w3schools.com/xml/rss_tag_category_item.asp 
