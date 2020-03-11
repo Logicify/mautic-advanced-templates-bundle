@@ -59,7 +59,7 @@ class TemplateProcessor
      * @return string
      * @throws \Throwable
      */
-    public function processTemplate($content, $lead)
+    public function processTemplate($content, $lead, $tokens)
     {
         $this->logger->debug('TemplateProcessor: Processing template');
         $this->logger->debug('LEAD: ' . var_export($lead, true));
