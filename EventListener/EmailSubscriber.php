@@ -75,6 +75,9 @@ class EmailSubscriber extends CommonSubscriber
 
         if ( empty( trim($event->getPlainText()) ) ) {
             $event->setPlainText( (new PlainTextHelper($content))->getText() );
+        } else {
+            $plainText = $this->templateProcessor->processTemplate($event->getPlainText(), $event->getLead(), $tokens);
+            $event->setPlainText($plainText);
         }
     }
 }
