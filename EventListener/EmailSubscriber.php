@@ -1,14 +1,11 @@
 <?php
 
 namespace MauticPlugin\MauticAdvancedTemplatesBundle\EventListener;
-use Mautic\CampaignBundle\Entity\Lead;
 use Mautic\CoreBundle\EventListener\CommonSubscriber;
 use Mautic\EmailBundle\EmailEvents;
 use Mautic\EmailBundle\Event as Events;
 use Mautic\EmailBundle\Helper\PlainTextHelper;
-use Mautic\CoreBundle\Exception as MauticException;
 use MauticPlugin\MauticAdvancedTemplatesBundle\Helper\TemplateProcessor;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class EmailSubscriber.
@@ -61,10 +58,10 @@ class EmailSubscriber extends CommonSubscriber
             $content = $event->getContent();
         }
 
-        $subject = $this->templateProcessor->processTemplate($subject,  $event->getLead());
+        $subject = $this->templateProcessor->processTemplate($subject,  $event);
         $event->setSubject($subject);
 
-        $content = $this->templateProcessor->processTemplate($content,  $event->getLead());
+        $content = $this->templateProcessor->processTemplate($content,  $event);
         $event->setContent($content);
 
 
