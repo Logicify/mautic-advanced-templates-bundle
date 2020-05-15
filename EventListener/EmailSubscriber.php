@@ -1,34 +1,38 @@
 <?php
 
 namespace MauticPlugin\MauticAdvancedTemplatesBundle\EventListener;
-use Mautic\CampaignBundle\Entity\Lead;
-use Mautic\CoreBundle\EventListener\CommonSubscriber;
 use Mautic\EmailBundle\EmailEvents;
 use Mautic\EmailBundle\Event as Events;
 use Mautic\EmailBundle\Helper\PlainTextHelper;
-use Mautic\CoreBundle\Exception as MauticException;
 use MauticPlugin\MauticAdvancedTemplatesBundle\Helper\TemplateProcessor;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class EmailSubscriber.
  */
-class EmailSubscriber extends CommonSubscriber
+class EmailSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var TokenHelper $tokenHelper ;
+     * @var TemplateProcessor $templateProcessor ;
      */
     protected $templateProcessor;
 
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     /**
      * EmailSubscriber constructor.
      *
-     * @param TokenHelper $tokenHelper
+     * @param TemplateProcessor $templateProcessor
+     * @param LoggerInterface $logger
      */
-    public function __construct(TemplateProcessor $templateProcessor)
+    public function __construct(TemplateProcessor $templateProcessor, LoggerInterface $logger)
     {
         $this->templateProcessor = $templateProcessor;
+        $this->logger = $logger;
     }
     /**
      * @return array

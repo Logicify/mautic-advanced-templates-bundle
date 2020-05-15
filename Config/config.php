@@ -11,7 +11,8 @@ return [
             'mautic.plugin.advanced_templates.email.subscriber' => [
                 'class'     => \MauticPlugin\MauticAdvancedTemplatesBundle\EventListener\EmailSubscriber::class,
                 'arguments' => [
-                    'mautic.plugin.advanced_templates.helper.template_processor'
+                    'mautic.plugin.advanced_templates.helper.template_processor',
+                    'monolog.logger.mautic'
                 ]
             ]
         ],
