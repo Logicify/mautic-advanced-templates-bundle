@@ -5,7 +5,7 @@ use Mautic\EmailBundle\EmailEvents;
 use Mautic\EmailBundle\Event as Events;
 use Mautic\EmailBundle\Helper\PlainTextHelper;
 use MauticPlugin\MauticAdvancedTemplatesBundle\Helper\TemplateProcessor;
-use Psr\Log\LoggerInterface;
+use Monolog\Logger;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -19,7 +19,7 @@ class EmailSubscriber implements EventSubscriberInterface
     protected $templateProcessor;
 
     /**
-     * @var LoggerInterface
+     * @var Logger
      */
     protected $logger;
 
@@ -27,9 +27,9 @@ class EmailSubscriber implements EventSubscriberInterface
      * EmailSubscriber constructor.
      *
      * @param TemplateProcessor $templateProcessor
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      */
-    public function __construct(TemplateProcessor $templateProcessor, LoggerInterface $logger)
+    public function __construct(TemplateProcessor $templateProcessor, Logger $logger)
     {
         $this->templateProcessor = $templateProcessor;
         $this->logger = $logger;
