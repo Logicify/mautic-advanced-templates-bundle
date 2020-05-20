@@ -44,7 +44,14 @@ There is a high probability it is compatible with other environments, but we nev
 Once installed, the plugin is ready to be used (no configuration required).
 Shortly saying, the text between `{% TWIG_BLOCK %}` and `{% END_TWIG_BLOCK %}` in your emails will be treated as a TWIG template. Please check out [TWIG official documentation](https://twig.symfony.com/doc/2.x/templates.html) to familiarize yourself with syntax and capabilities.
 
-You can also avoid lots of copy-and-paste with `include()` function available in templates. Just put reusable pieces of templates into Dynamic Content entity and use it in your main email templates (see examples below). 
+You can also avoid lots of copy-and-paste with `include()` function available in templates. Just put reusable pieces of templates into Dynamic Content entity and use it in your main email templates, see examples below:
+
+ 1. Basic scenario
+ 2. Rendering structured data
+ 3. Reusable code snippets
+ 4. RSS support
+ 5. RSS related items to contact's segments
+ 6. 
 
 Note: The context will be shared with included template so each variable available outside will be available in the included snippet.   
 
@@ -166,6 +173,20 @@ https://www.w3schools.com/xml/rss_tag_category_item.asp
                  </li>
             {% endfor %}
             </ul>             
+        {% END_TWIG_BLOCK %}
+```
+
+### Example 6: Using `lead.tags`
+
+```twig
+        {% TWIG_BLOCK %}
+            {% set tags = lead.tags %}     
+            Tags:
+            <ul> 
+                {% for item in tags %}
+                <li>{{item}}</li>
+                {% endfor %}
+            </ul>                                           
         {% END_TWIG_BLOCK %}
 ```
 
