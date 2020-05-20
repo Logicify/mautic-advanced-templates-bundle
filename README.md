@@ -46,12 +46,12 @@ Shortly saying, the text between `{% TWIG_BLOCK %}` and `{% END_TWIG_BLOCK %}` i
 
 You can also avoid lots of copy-and-paste with `include()` function available in templates. Just put reusable pieces of templates into Dynamic Content entity and use it in your main email templates, see examples below:
 
- 1. Basic scenario
- 2. Rendering structured data
- 3. Reusable code snippets
- 4. RSS support
- 5. RSS related items to contact's segments
- 6. 
+ 1. [Basic scenario](#example-1-basic-scenario)
+ 2. [Rendering structured data](#example-2-rendering-structured-data)
+ 3. [Reusable code snippets](#example-3-reusable-code-snippets)
+ 4. [RSS support](#example-4-rss-support)
+ 5. [RSS related items to contact's segments](#example-5-rss-related-items-to-contacts-segments)
+ 6. [Using `lead.tags`](#example-6-using-leadtags)
 
 Note: The context will be shared with included template so each variable available outside will be available in the included snippet.   
 
