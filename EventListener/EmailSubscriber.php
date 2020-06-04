@@ -69,7 +69,7 @@ class EmailSubscriber implements EventSubscriberInterface
         $event->setSubject($subject);
 
         $content = $this->templateProcessor->processTemplate($content,  $event->getLead());
-        $event->setContent($content);
+        $event->setContent($content, false);
 
 
         if ( empty( trim($event->getPlainText()) ) ) {
