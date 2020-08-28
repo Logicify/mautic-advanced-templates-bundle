@@ -37,7 +37,9 @@ class SmsSubscriber extends CommonSubscriber
     {
         return [
             SmsEvents::SMS_ON_SEND => ['onSmsGenerate', 300],
-            SmsEvents::SMS_ON_DISPLAY => ['onSmsGenerate', 0],
+            // I dont know how to do this without editing core. 
+            // since there does not seem to be a simular way to call it yet.            
+            // SmsEvents::SMS_ON_DISPLAY => ['onSmsGenerate', 0],
         ];
     }
 
