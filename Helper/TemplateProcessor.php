@@ -59,7 +59,11 @@ class TemplateProcessor
     public function processTemplate($content, $lead)
     {
         $this->logger->debug('TemplateProcessor: Processing template');
-        $this->logger->debug('LEAD: ' . var_export($lead, true));
+        // this was causing huge memory useage. 
+        //         [2020-08-28 20:18:03] mautic.WARNING: PHP Warning - var_export does not handle circular references - in file /var/www/html/plugins/MauticAdvancedTemplatesBundle/Helper/TemplateProcessor.php - at line 62 {"content":"test message","lead":"[object] (Mautic\\LeadBundle\\Entity\\Lead: Mautic\\LeadBundle\\Entity\\Lead with ID #1)"} []
+        // [2020-08-28 20:18:03] mautic.ERROR: PHP Error: Allowed memory size of 2147483648 bytes exhausted (tried to allocate 1071648768 bytes) - in file /var/www/html/plugins/MauticAdvancedTemplatesBundle/Helper/TemplateProcessor.php - at line 62 [] []
+
+        // $this->logger->debug('LEAD: ' . var_export($lead, true));
         $content = preg_replace_callback_array([
             TemplateProcessor::$matchTwigBlockRegex => $this->processTwigBlock($lead)
         ], $content);
