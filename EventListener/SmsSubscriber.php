@@ -2,7 +2,7 @@
 
 namespace MauticPlugin\MauticAdvancedTemplatesBundle\EventListener;
 use Mautic\CampaignBundle\Entity\Lead;
-use Mautic\CoreBundle\EventListener\CommonSubscriber;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Mautic\SmsBundle\SmsEvents;
 use Mautic\SmsBundle\Event as Events;
 use Mautic\EmailBundle\Helper\PlainTextHelper;
@@ -13,7 +13,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class EmailSubscriber.
  */
-class SmsSubscriber extends CommonSubscriber
+class SmsSubscriber implements EventSubscriberInterface
 {
     /**
      * @var TokenHelper $tokenHelper ;
