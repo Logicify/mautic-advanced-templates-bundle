@@ -1,5 +1,6 @@
 {
   "name": "unikrn/mautic-advanced-templates-bundle",
+  "description": "Support for Twig template variables in emails. Forked from Logicify/mautic-advanced-templates-bundle",
   "type": "mautic-plugin",
   "require": {
     "unikrn/mautic-composer-plugin": "^2.1.0"
