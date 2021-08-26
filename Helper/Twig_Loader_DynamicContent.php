@@ -5,10 +5,11 @@ namespace MauticPlugin\MauticAdvancedTemplatesBundle\Helper;
 use Mautic\CoreBundle\Factory\ModelFactory;
 use Mautic\DynamicContentBundle\Entity\DynamicContent;
 use Psr\Log\LoggerInterface;
-use Twig_Error_Loader;
-use Twig_Source;
+use Twig\Error\LoaderError;
+use Twig\Source;
+use Twig\Loader\LoaderInterface;
 
-class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface, \Twig_SourceContextLoaderInterface
+class Twig_Loader_DynamicContent implements LoaderInterface
 {
     private static $NAME_PREFIX = 'dc:';
 
@@ -40,7 +41,7 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
      *
      * @return string The template source code
      *
-     * @throws Twig_Error_Loader When $name is not found
+     * @throws LoaderError When $name is not found
      *
      * @deprecated since 1.27 (to be removed in 2.0), implement Twig_SourceContextLoaderInterface
      */
@@ -58,7 +59,7 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
      * @return string The cache key
      *
      */
-    public function getCacheKey($name)
+    public function getCacheKey(string $name):string
     {
         return $name;
     }
@@ -73,7 +74,7 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
      * @return bool true if the template is fresh, false otherwise
      *
      */
-    public function isFresh($name, $time)
+    public function isFresh(string $name, int $time):bool
     {
         // TODO: Implement isFresh() method.
         $this->logger->debug('Twig_Loader_DynamicContent: Is Fresh: ' . $time . ', ' . $name);
@@ -85,17 +86,17 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
      *
      * @param string $name The template logical name
      *
-     * @return Twig_Source
+     * @return Source
      *
-     * @throws Twig_Error_Loader When $name is not found
+     * @throws LoaderError When $name is not found
      */
-    public function getSourceContext($name)
+    public function getSourceContext(string $name):Source
     {
         $dynamicContent = $this->findTemplate($this->aliasForTemplateName($name));
         if ($dynamicContent == null) {
-            throw new Twig_Error_Loader('Template ' . $name . ' does not exist');
+            throw new LoaderError('Template ' . $name . ' does not exist');
         }
-        return new Twig_Source($dynamicContent->getContent(), $name);
+        return new Source($dynamicContent->getContent(), $name);
 
     }
 
