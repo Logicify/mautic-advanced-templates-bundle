@@ -135,7 +135,7 @@ class Twig_Loader_DynamicContent implements LoaderInterface
             return null;
         }
 
-        /**** The result array key is the dynamic content ID - So use array_keys and get the first (and only) found key  ****/
+        /**** The result array key is the dynamic content ID - So use array_keys and get the first (and only) found key  ***/
         $keys = array_keys($result);     
         
         return $result[$keys[0]]; 

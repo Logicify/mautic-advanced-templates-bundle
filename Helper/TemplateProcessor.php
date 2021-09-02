@@ -32,7 +32,7 @@ class TemplateProcessor
     /**
      * @var FeedFactory
      */
-    private $feedFactory;   
+    private $feedFactory;
 
     /**
      * TemplateProcessor constructor.
