@@ -2,6 +2,6 @@
   "name": "logicify/mautic-advanced-templates-bundle",
   "type": "mautic-plugin",
   "require": {
-    "mautic/composer-plugin": "^1.0"
+    "unikrn/mautic-composer-plugin": "^2.1.0"
   }
 }

@@ -11,9 +11,28 @@ return [
             'mautic.plugin.advanced_templates.email.subscriber' => [
                 'class'     => \MauticPlugin\MauticAdvancedTemplatesBundle\EventListener\EmailSubscriber::class,
                 'arguments' => [
-                    'mautic.plugin.advanced_templates.helper.template_processor'
+                    'mautic.plugin.advanced_templates.helper.template_processor',
+                    'monolog.logger.mautic',                    
+                    'mautic.plugin.advanced_templates.helper.form_submission'
                 ]
-            ]
+                ],
+            'mautic.plugin.advanced_templates.dwc.subscriber' => [
+                'class'     => \MauticPlugin\MauticAdvancedTemplatesBundle\EventListener\DynamicContentSubscriber::class,
+                'arguments' => [
+                    'mautic.plugin.advanced_templates.helper.template_processor',
+                    'monolog.logger.mautic',
+                    'mautic.plugin.advanced_templates.helper.form_submission'
+                ]
+            ],
+            'mautic.plugin.advanced_templates.page.subscriber' => [
+                'class'     => \MauticPlugin\MauticAdvancedTemplatesBundle\EventListener\PageSubscriber::class,
+                'arguments' => [
+                    'mautic.plugin.advanced_templates.helper.template_processor',
+                    'monolog.logger.mautic',
+                    'mautic.plugin.advanced_templates.helper.form_submission',
+                    'mautic.tracker.contact'
+                ]
+            ]                                  
         ],
         'other' => [
             // Template processor
@@ -44,7 +63,12 @@ return [
                     'mautic.lead.model.lead',
                 ]
             ],
-
+            'mautic.plugin.advanced_templates.helper.form_submission' => [
+                'class' => \MauticPlugin\MauticAdvancedTemplatesBundle\Helper\FormSubmission::class,
+                'arguments' => [
+                    'doctrine.dbal.default_connection',
+                ]
+            ],            
         ]
     ]
 ];

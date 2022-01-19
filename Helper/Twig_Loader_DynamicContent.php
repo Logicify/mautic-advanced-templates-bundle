@@ -5,10 +5,11 @@ namespace MauticPlugin\MauticAdvancedTemplatesBundle\Helper;
 use Mautic\CoreBundle\Factory\ModelFactory;
 use Mautic\DynamicContentBundle\Entity\DynamicContent;
 use Psr\Log\LoggerInterface;
-use Twig_Error_Loader;
-use Twig_Source;
 
-class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface, \Twig_SourceContextLoaderInterface
+use Twig\Error\LoaderError;
+use Twig\Source;
+
+class Twig_Loader_DynamicContent implements \Twig\Loader\LoaderInterface 
 {
     private static $NAME_PREFIX = 'dc:';
 
@@ -44,12 +45,13 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
      *
      * @deprecated since 1.27 (to be removed in 2.0), implement Twig_SourceContextLoaderInterface
      */
+/*
     public function getSource($name)
     {
         @trigger_error(sprintf('Calling "getSource" on "%s" is deprecated since 1.27. Use getSourceContext() instead.', get_class($this)), E_USER_DEPRECATED);
         return $this->getSourceContext($name)->getCode();
     }
-
+*/
     /**
      * Gets the cache key to use for the cache for a given template name.
      *
@@ -58,7 +60,7 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
      * @return string The cache key
      *
      */
-    public function getCacheKey($name)
+public function getCacheKey(string $name): string
     {
         return $name;
     }
@@ -73,7 +75,7 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
      * @return bool true if the template is fresh, false otherwise
      *
      */
-    public function isFresh($name, $time)
+    public function isFresh(string $name, int $time): bool
     {
         // TODO: Implement isFresh() method.
         $this->logger->debug('Twig_Loader_DynamicContent: Is Fresh: ' . $time . ', ' . $name);
@@ -89,7 +91,7 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
      *
      * @throws Twig_Error_Loader When $name is not found
      */
-    public function getSourceContext($name)
+    public function getSourceContext(string $name): Source
     {
         $dynamicContent = $this->findTemplate($this->aliasForTemplateName($name));
         if ($dynamicContent == null) {

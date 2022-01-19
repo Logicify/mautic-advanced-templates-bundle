@@ -1,35 +1,41 @@
 <?php
 
 namespace MauticPlugin\MauticAdvancedTemplatesBundle\EventListener;
-use Mautic\CampaignBundle\Entity\Lead;
-use Mautic\CoreBundle\EventListener\CommonSubscriber;
 use Mautic\EmailBundle\EmailEvents;
 use Mautic\EmailBundle\Event as Events;
 use Mautic\EmailBundle\Helper\PlainTextHelper;
-use Mautic\CoreBundle\Exception as MauticException;
 use MauticPlugin\MauticAdvancedTemplatesBundle\Helper\TemplateProcessor;
-use Psr\Log\LoggerInterface;
+use Monolog\Logger;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class EmailSubscriber.
  */
-class EmailSubscriber extends CommonSubscriber
+class EmailSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var TokenHelper $tokenHelper ;
+     * @var TemplateProcessor $templateProcessor ;
      */
     protected $templateProcessor;
 
+    /**
+     * @var Logger
+     */
+    protected $logger;
 
     /**
      * EmailSubscriber constructor.
      *
-     * @param TokenHelper $tokenHelper
+     * @param TemplateProcessor $templateProcessor
+     * @param Logger $logger
      */
-    public function __construct(TemplateProcessor $templateProcessor)
+    public function __construct(TemplateProcessor $templateProcessor, Logger $logger, FormSubmission $formSubmissionHelper)
     {
         $this->templateProcessor = $templateProcessor;
+        $this->logger = $logger;
+        $this->formSubmissionHelper = $formSubmissionHelper;        
     }
+
     /**
      * @return array
      */
@@ -39,6 +45,17 @@ class EmailSubscriber extends CommonSubscriber
             EmailEvents::EMAIL_ON_SEND => ['onEmailGenerate', 300],
             EmailEvents::EMAIL_ON_DISPLAY => ['onEmailGenerate', 0],
         ];
+    }
+
+    /**
+     * Try to retrieve the current form values of the active lead 
+     * 
+     * @param integer $leadId  
+     * @param integer $emailId
+     */
+    private function getFormData($leadId)
+    {
+        return $this->formSubmissionHelper->getFormData($leadId);
     }
 
     /**
@@ -61,15 +78,23 @@ class EmailSubscriber extends CommonSubscriber
             $content = $event->getContent();
         }
 
-        $subject = $this->templateProcessor->processTemplate($subject,  $event->getLead());
+        $lead = $event->getLead();
+        $leadCredentials = $lead->getProfileFields();
+        $formData = $this->getFormData($leadCredentials['id']);
+
+        //we want this variables in the twig engine
+        $templateVars = array(
+            'lead' => $lead,
+            'form' => $formData
+        );        
+       
+        $subject = $this->templateProcessor->processTemplate($subject,  $templateVars);
         $event->setSubject($subject);
 
-        $content = $this->templateProcessor->processTemplate($content,  $event->getLead());
-        $event->setContent($content);
+        $content = $this->templateProcessor->processTemplate($content,  $templateVars);
+        $event->setContent($content, false);
 
-
-        if ( empty( trim($event->getPlainText()) ) ) {
-            $event->setPlainText( (new PlainTextHelper($content))->getText() );
-        }
+        // Always generate Plaintext Version 
+        $event->setPlainText( (new PlainTextHelper($content))->getText() );
     }
 }
