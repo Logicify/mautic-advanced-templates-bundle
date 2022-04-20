@@ -5,10 +5,11 @@ namespace MauticPlugin\MauticAdvancedTemplatesBundle\Helper;
 use Mautic\CoreBundle\Factory\ModelFactory;
 use Mautic\DynamicContentBundle\Entity\DynamicContent;
 use Psr\Log\LoggerInterface;
-use Twig_Error_Loader;
-use Twig_Source;
+use Twig\Loader\LoaderInterface as Twig_LoaderInterface;
+use Twig\Error\LoaderError as Twig_Error_Loader;
+use Twig\Source as Twig_Source;
 
-class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface, \Twig_SourceContextLoaderInterface
+class Twig_Loader_DynamicContent implements Twig_LoaderInterface
 {
     private static $NAME_PREFIX = 'dc:';
 
@@ -58,7 +59,7 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
      * @return string The cache key
      *
      */
-    public function getCacheKey($name)
+    public function getCacheKey(string $name): string
     {
         return $name;
     }
@@ -73,7 +74,7 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
      * @return bool true if the template is fresh, false otherwise
      *
      */
-    public function isFresh($name, $time)
+    public function isFresh(string $name, int $time): bool
     {
         // TODO: Implement isFresh() method.
         $this->logger->debug('Twig_Loader_DynamicContent: Is Fresh: ' . $time . ', ' . $name);
@@ -85,11 +86,11 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
      *
      * @param string $name The template logical name
      *
-     * @return Twig_Source
+     * @return Twig\Source
      *
-     * @throws Twig_Error_Loader When $name is not found
+     * @throws Twig\Error\LoaderError When $name is not found
      */
-    public function getSourceContext($name)
+    public function getSourceContext(string $name): Twig_Source
     {
         $dynamicContent = $this->findTemplate($this->aliasForTemplateName($name));
         if ($dynamicContent == null) {
@@ -147,7 +148,7 @@ class Twig_Loader_DynamicContent implements \Twig_LoaderInterface, \Twig_ExistsL
      *
      * @return bool If the template source code is handled by this loader or not
      */
-    public function exists($name)
+    public function exists(string $name)
     {
         return $this->supports($name) && $this->findTemplate($this->aliasForTemplateName($name)) !== null;
     }
