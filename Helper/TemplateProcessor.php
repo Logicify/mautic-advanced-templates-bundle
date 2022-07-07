@@ -5,6 +5,10 @@ namespace MauticPlugin\MauticAdvancedTemplatesBundle\Helper;
 use MauticPlugin\MauticAdvancedTemplatesBundle\Feed\FeedFactory;
 use MauticPlugin\MauticCrmBundle\Integration\Salesforce\Object\Lead;
 use Psr\Log\LoggerInterface;
+use Twig\Environment as Twig_Environment;
+use Twig\Loader\ChainLoader as Twig_Loader_Chain;
+use Twig\Loader\ArrayLoader as Twig_Loader_Array;
+use Twig\TwigFilter as Twig_SimpleFilter;
 
 class TemplateProcessor
 {
@@ -15,7 +19,7 @@ class TemplateProcessor
     protected $logger;
 
     /**
-     * @var \Twig_Environment
+     * @var Twig_Environment
      */
     private $twigEnv;
     private $twigDynamicContentLoader;
@@ -42,8 +46,8 @@ class TemplateProcessor
         $this->logger = $logger;
         $this->twigDynamicContentLoader = $twigDynamicContentLoader;
         $logger->debug('TemplateProcessor: created $twigDynamicContentLoader');
-        $this->twigEnv = new \Twig_Environment(new \Twig_Loader_Chain([
-            $twigDynamicContentLoader, new \Twig_Loader_Array([])
+        $this->twigEnv = new Twig_Environment(new Twig_Loader_Chain([
+            $twigDynamicContentLoader, new Twig_Loader_Array([])
         ]));
         $this->configureTwig($this->twigEnv);
         $this->feedFactory = $feedFactory;
@@ -56,40 +60,45 @@ class TemplateProcessor
      * @return string
      * @throws \Throwable
      */
-    public function processTemplate($content, $lead)
+    public function processTemplate($content, $lead, $tokens = null)
     {
         $this->logger->debug('TemplateProcessor: Processing template');
         $this->logger->debug('LEAD: ' . var_export($lead, true));
         $content = preg_replace_callback_array([
-            TemplateProcessor::$matchTwigBlockRegex => $this->processTwigBlock($lead)
+            TemplateProcessor::$matchTwigBlockRegex => $this->processTwigBlock($lead, $tokens)
         ], $content);
         $this->logger->debug('TemplateProcessor: Template processed');
         return $content;
     }
 
-    protected function configureTwig(\Twig_Environment $twig)
+    protected function configureTwig(Twig_Environment $twig)
     {
         // You might want to register some custom TWIG tags or functions here
 
         // TWIG filter json_decode
-        $twig->addFilter(new \Twig_SimpleFilter('json_decode', function ($string) {
+        $twig->addFilter(new Twig_SimpleFilter('json_decode', function ($string) {
             return json_decode($string, true);
         }));
 
-        $twig->addFilter(new \Twig_SimpleFilter('rss', function () {
+        $twig->addFilter(new Twig_SimpleFilter('json_encode', function ($obj) {
+            return json_encode($obj);
+        }));
+
+        $twig->addFilter(new Twig_SimpleFilter('rss', function () {
             return $this->feedFactory->getItems($this->lead['id'], func_get_args());
         }));
     }
 
-    private function processTwigBlock($lead)
+    private function processTwigBlock($lead, $tokens = null)
     {
         $this->lead = $lead;
-        return function ($matches) use ($lead) {
+        return function ($matches) use ($lead, $tokens) {
             $templateSource = $matches[1];
             $this->logger->debug('BLOCK SOURCE: ' . var_export($templateSource, true));
             $template = $this->twigEnv->createTemplate($templateSource);
             $renderedTemplate = $template->render([
-                'lead' => $lead
+                'lead' => $lead,
+                'tokens' => $tokens
             ]);
             $this->logger->debug('RENDERED BLOCK: ' . var_export($renderedTemplate, true));
             return $renderedTemplate;
