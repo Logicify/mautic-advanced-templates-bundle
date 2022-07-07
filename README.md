@@ -12,8 +12,8 @@ Another example: you might want to include dynamic content to your email. Let's 
 
 This plugin was tested with:
 
-* Mautic v2.14.2
-* PHP v7.1.23
+* Mautic v4.4.0
+* PHP v8.0
 
 There is a high probability it is compatible with other environments, but we never tested it.
 
