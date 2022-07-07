@@ -104,4 +104,17 @@ class TemplateProcessor
             return $renderedTemplate;
         };
     }
+    
+    public function addTrackingPixel($content)
+    {
+        // Append tracking pixel
+        $trackingImg = '<img height="1" width="1" src="{tracking_pixel}" alt="" />';
+        if (strpos($content, '</body>') !== false) {
+            $content = str_replace('</body>', $trackingImg.'</body>', $content);
+        } else {
+            $content .= $trackingImg;
+        }
+
+        return $content;
+    }
 }
