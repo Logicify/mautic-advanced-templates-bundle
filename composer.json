@@ -4,11 +4,5 @@
   "type": "mautic-plugin",
   "require": {
     "unikrn/mautic-composer-plugin": "^2.1.0"
-  },
-  "authors": [
-    {
-      "name": "Mark Mulder",
-      "email": "mark@markmulder.net"
-    }
-  ]
+  }
 }
