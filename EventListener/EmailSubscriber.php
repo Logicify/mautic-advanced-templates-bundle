@@ -2,7 +2,7 @@
 
 namespace MauticPlugin\MauticAdvancedTemplatesBundle\EventListener;
 use Mautic\CampaignBundle\Entity\Lead;
-use Mautic\CoreBundle\EventListener\CommonSubscriber;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Mautic\EmailBundle\EmailEvents;
 use Mautic\EmailBundle\Event as Events;
 use Mautic\EmailBundle\Helper\PlainTextHelper;
@@ -13,7 +13,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class EmailSubscriber.
  */
-class EmailSubscriber extends CommonSubscriber
+class EmailSubscriber implements EventSubscriberInterface
 {
     /**
      * @var TokenHelper $tokenHelper ;
@@ -41,6 +41,34 @@ class EmailSubscriber extends CommonSubscriber
         ];
     }
 
+    private function getProperties(Events\EmailSendEvent $event) {
+        $tokens = [];
+
+        if (!$event->getEmail()) {
+            return [
+                'subject' => $event->getSubject(),
+                'content' => $event->getContent(),
+                'tokens' => $tokens,
+            ];
+        }
+
+        $email = $event->getEmail();
+
+        $subject = $email->getSubject();
+        $content = $email->getCustomHtml();
+        $dynamic = $email->getDynamicContent();
+
+        foreach ($dynamic as $prop) {
+            $tokens[$prop['tokenName']] = $prop['content'];
+        }
+
+        return [
+            'subject' => $subject,
+            'content' => $content,
+            'tokens' => $tokens,
+        ];
+    }
+
     /**
      * Search and replace tokens with content
      *
@@ -51,22 +79,18 @@ class EmailSubscriber extends CommonSubscriber
      */
     public function onEmailGenerate(Events\EmailSendEvent $event)
     {
-        $this->logger->info('onEmailGenerate MauticAdvancedTemplatesBundle\EmailSubscriber');
-
-        if ($event->getEmail()) {
-            $subject = $event->getEmail()->getSubject();
-            $content = $event->getEmail()->getCustomHtml();
-        }else{
-            $subject = $event->getSubject();
-            $content = $event->getContent();
+        if ($event->isDynamicContentParsing()) {
+            return;
         }
 
-        $subject = $this->templateProcessor->processTemplate($subject,  $event->getLead());
+        $props = $this->getProperties($event);
+
+        $subject = $this->templateProcessor->processTemplate($props['subject'],  $event->getLead());
         $event->setSubject($subject);
 
-        $content = $this->templateProcessor->processTemplate($content,  $event->getLead());
+        $content = $this->templateProcessor->processTemplate($props['content'],  $event->getLead(), $props['tokens']);
+        $content = $this->templateProcessor->addTrackingPixel($content);
         $event->setContent($content);
-
 
         if ( empty( trim($event->getPlainText()) ) ) {
             $event->setPlainText( (new PlainTextHelper($content))->getText() );
