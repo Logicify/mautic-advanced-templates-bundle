@@ -215,7 +215,7 @@ To render, code something like this:
 ## Credits
 
  - Dmitry Berezovsky, Logicify ([http://logicify.com/](https://logicify.com/?utm_source=github&utm_campaign=mautic-templates&utm_medium=opensource))
- - Luis Rodriguez, ldrrp ([https://github.com/ldrrp](https://github.com/ldrrp)) - [Contact me on slack](https://www.mautic.org/slack)
+ - Luis Rodriguez, ldrrp/MarketSmart ([https://github.com/ldrrp](https://github.com/ldrrp)) - [Contact me on slack](https://www.mautic.org/slack)
 
 ## Contributors
 
