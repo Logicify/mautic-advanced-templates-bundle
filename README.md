@@ -1,6 +1,6 @@
 # Mautic Advanced Templates Bundle
 
-Plugin extends default email template capabilities with TWIG block so you can use advanced templating techniques like conditions, loops etc.
+Plugin extends default email template capabilities with TWIG block so you can use advanced templating techniques like conditions, loops etc. Support has also been extended to sms templates.
 
 ### Purpose
 
@@ -15,7 +15,9 @@ This plugin was tested with:
 * Mautic v4.4.0
 * PHP v8.0
 
-There is a high probability it is compatible with other environments, but we never tested it.
+There is a high probability it is compatible with other 4.x versions but it is untested. Will not work with versions lower than 4.x.
+
+* Mautic 2.x - [Release 1.1](https://github.com/Logicify/mautic-advanced-templates-bundle/releases/tag/1.1)
 
 ### Features
 
@@ -28,12 +30,14 @@ There is a high probability it is compatible with other environments, but we nev
 * Reusable TWIG snippets could be loaded form Dynamic Content entities.
 * TWIG extended with some useful functions and filters (see below).
 * RSS support
-* RSS items related to contact's segment preferences center and RSS category    
+* RSS items related to contact's segment preferences center and RSS category
+* json_encode, json_decode twig implementations
+* 
 
 ## Installation
 
 1. Download or clone this bundle into your Mautic `/plugins` folder. **Make sure the name of the folder containing plugin files is** `MauticAdvancedTemplatesBundle` (case sensitive). Rename it if it isn't, otherwise it will not be recognized.
-2. Delete your cache (`app/cache/prod`).
+2. Delete your cache with the command (`php bin/console cache:clear`).
 3. In the Mautic GUI, go to the gear and then to Plugins.
 4. Click "Install/Upgrade Plugins".
 5. You should see the Advanced Templates Bundle in your list of plugins.
