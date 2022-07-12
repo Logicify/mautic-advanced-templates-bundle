@@ -63,7 +63,8 @@ class TemplateProcessor
     public function processTemplate($content, $lead, $tokens = null)
     {
         $this->logger->debug('TemplateProcessor: Processing template');
-        $this->logger->debug('LEAD: ' . var_export($lead, true));
+        // This was causing huge memory usage. Uncomment to debug.
+        // $this->logger->debug('LEAD: ' . var_export($lead, true));
         $content = preg_replace_callback_array([
             TemplateProcessor::$matchTwigBlockRegex => $this->processTwigBlock($lead, $tokens)
         ], $content);
@@ -94,13 +95,15 @@ class TemplateProcessor
         $this->lead = $lead;
         return function ($matches) use ($lead, $tokens) {
             $templateSource = $matches[1];
-            $this->logger->debug('BLOCK SOURCE: ' . var_export($templateSource, true));
+            // Uncomment to debug. This causes high memory usage with var_export.
+            // $this->logger->debug('BLOCK SOURCE: ' . var_export($templateSource, true));
             $template = $this->twigEnv->createTemplate($templateSource);
             $renderedTemplate = $template->render([
                 'lead' => $lead,
                 'tokens' => $tokens
             ]);
-            $this->logger->debug('RENDERED BLOCK: ' . var_export($renderedTemplate, true));
+            // Uncomment to debug. This causes high memory usage with var_export.
+            // $this->logger->debug('RENDERED BLOCK: ' . var_export($renderedTemplate, true));
             return $renderedTemplate;
         };
     }

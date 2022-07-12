@@ -9,6 +9,7 @@ use Mautic\EmailBundle\Helper\PlainTextHelper;
 use Mautic\CoreBundle\Exception as MauticException;
 use MauticPlugin\MauticAdvancedTemplatesBundle\Helper\TemplateProcessor;
 use Psr\Log\LoggerInterface;
+use Monolog\Logger;
 
 /**
  * Class EmailSubscriber.
@@ -16,7 +17,7 @@ use Psr\Log\LoggerInterface;
 class EmailSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var TokenHelper $tokenHelper ;
+     * @var TemplateProcessor $templateProcessor ;
      */
     protected $templateProcessor;
 
@@ -26,9 +27,10 @@ class EmailSubscriber implements EventSubscriberInterface
      *
      * @param TokenHelper $tokenHelper
      */
-    public function __construct(TemplateProcessor $templateProcessor)
+    public function __construct(TemplateProcessor $templateProcessor, Logger $logger)
     {
         $this->templateProcessor = $templateProcessor;
+        $this->logger = $logger;
     }
     /**
      * @return array
