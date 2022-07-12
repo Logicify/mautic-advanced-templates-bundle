@@ -169,9 +169,59 @@ https://www.w3schools.com/xml/rss_tag_category_item.asp
         {% END_TWIG_BLOCK %}
 ```
 
+### Example 6: Using `lead.tags`
+
+```twig
+        {% TWIG_BLOCK %}
+            {% set tags = lead.tags %}     
+            Tags:
+            <ul> 
+                {% for item in tags %}
+                <li>{{item}}</li>
+                {% endfor %}
+            </ul>                                           
+        {% END_TWIG_BLOCK %}
+```
+
+### Example 7: Rendering structured data from tokens
+
+Instead of pushing data to a custom field, you can specify dynamic data when using the Email Send API. When making the API call, set your POST body to a JSON object including a `tokens` key like below:
+
+```json
+{
+    "tokens": {
+        "{cart}": [{"sku":"A100","name":"Item 1"},{"sku":"Z200","name":"Item 2"}]
+    }
+}
+```
+
+To render, code something like this:
+
+```twig
+{% TWIG_BLOCK %}
+  Your cart:
+  <ul>
+  {% for item in cart %}
+    <li>Item Name: {{ item.name }} (SKU: {{ item.sku }})</li>
+  {% endfor %}
+  </ul>
+{% END_TWIG_BLOCK %}
+```
+
 ## Credits
 
-Dmitry Berezovsky, Logicify ([http://logicify.com/](https://logicify.com/?utm_source=github&utm_campaign=mautic-templates&utm_medium=opensource))
+ - Dmitry Berezovsky, Logicify ([http://logicify.com/](https://logicify.com/?utm_source=github&utm_campaign=mautic-templates&utm_medium=opensource))
+ - Luis Rodriguez, ldrrp ([https://github.com/ldrrp](https://github.com/ldrrp)) - [Contact me on slack](https://www.mautic.org/slack)
+
+## Contributors
+
+Thanks goes to these wonderful people
+
+ - [Leo Giovanetti, leog](https://github.com/leog) - Lead tags implementation
+ - [Ben U, bobsburgers](https://github.com/bobsburgers) - SMS implementation
+ - [Felipe J. L. Rita, zerodois](https://github.com/zerodois) - Mautic 4.x compatibility
+ - [Nick Pappas, radicand](https://github.com/radicand) - Arbritrary Send Mail API tokens
+
 
 ## Disclaimer
 

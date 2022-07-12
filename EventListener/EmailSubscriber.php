@@ -7,6 +7,7 @@ use Mautic\EmailBundle\EmailEvents;
 use Mautic\EmailBundle\Event as Events;
 use Mautic\EmailBundle\Helper\PlainTextHelper;
 use Mautic\CoreBundle\Exception as MauticException;
+use Mautic\LeadBundle\Model\LeadModel;
 use MauticPlugin\MauticAdvancedTemplatesBundle\Helper\TemplateProcessor;
 use Psr\Log\LoggerInterface;
 use Monolog\Logger;
@@ -17,9 +18,19 @@ use Monolog\Logger;
 class EmailSubscriber implements EventSubscriberInterface
 {
     /**
+     * @var LeadModel
+     */
+    private $leadModel;
+
+    /**
      * @var TemplateProcessor $templateProcessor ;
      */
     protected $templateProcessor;
+
+    /**
+     * @var LoggerInterface $logger ;
+     */
+    protected $logger;
 
 
     /**
@@ -27,9 +38,10 @@ class EmailSubscriber implements EventSubscriberInterface
      *
      * @param TokenHelper $tokenHelper
      */
-    public function __construct(TemplateProcessor $templateProcessor, Logger $logger)
+    public function __construct(TemplateProcessor $templateProcessor, LeadModel $leadModel, Logger $logger)
     {
         $this->templateProcessor = $templateProcessor;
+        $this->leadModel = $leadModel;
         $this->logger = $logger;
     }
     /**
@@ -64,6 +76,12 @@ class EmailSubscriber implements EventSubscriberInterface
             $tokens[$prop['tokenName']] = $prop['content'];
         }
 
+        //Add arbritrary tokens when using the email send api
+        $originalTokens = $event->getTokens();
+        foreach($originalTokens as $k => $v) {
+            $tokens[preg_replace('/^{(.*)}$/', '${1}', $k)] = $v;
+        }
+
         return [
             'subject' => $subject,
             'content' => $content,
@@ -81,16 +99,27 @@ class EmailSubscriber implements EventSubscriberInterface
      */
     public function onEmailGenerate(Events\EmailSendEvent $event)
     {
+        $this->logger->info('onEmailGenerate MauticAdvancedTemplatesBundle\EmailSubscriber');
+
         if ($event->isDynamicContentParsing()) {
             return;
         }
 
         $props = $this->getProperties($event);
 
-        $subject = $this->templateProcessor->processTemplate($props['subject'],  $event->getLead());
+        $lead = $event->getLead();
+        $leadmodel = $this->leadModel->getEntity($lead['id']);
+        $lead['tags'] = [];
+        if ($leadmodel && count($leadmodel->getTags()) > 0) {
+            foreach ($leadmodel->getTags() as $tag) {
+                $lead['tags'][] = $tag->getTag();
+            }
+        }
+
+        $subject = $this->templateProcessor->processTemplate($props['subject'],  $lead);
         $event->setSubject($subject);
 
-        $content = $this->templateProcessor->processTemplate($props['content'],  $event->getLead(), $props['tokens']);
+        $content = $this->templateProcessor->processTemplate($props['content'],  $lead, $props['tokens']);
         $content = $this->templateProcessor->addTrackingPixel($content);
         $event->setContent($content);
 

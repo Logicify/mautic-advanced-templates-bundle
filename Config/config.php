@@ -15,6 +15,13 @@ return [
                     'mautic.lead.model.lead',
                     'monolog.logger.mautic',
                 ]
+            ],
+            'mautic.plugin.advanced_templates.sms.subscriber' => [
+                'class'     => \MauticPlugin\MauticAdvancedTemplatesBundle\EventListener\SmsSubscriber::class,
+                'arguments' => [
+                    'mautic.plugin.advanced_templates.helper.template_processor',
+                    'monolog.logger.mautic',
+                ]
             ]
         ],
         'other' => [
