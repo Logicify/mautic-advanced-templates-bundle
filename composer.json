@@ -1,7 +1,13 @@
 {
   "name": "logicify/mautic-advanced-templates-bundle",
+  "description": "Plugin extends default email template capabilities with TWIG block so you can use advanced templating techniques like conditions, loops etc. Support has also been extended to sms templates.",
   "type": "mautic-plugin",
+  "license": "MIT",
   "require": {
-    "mautic/composer-plugin": "^1.0"
-  }
+    "php": ">=8.0.0",
+    "mautic/core-lib": "^5.0"
+  },
+  "extra": {
+    "install-directory-name": "MauticAdvancedTemplatesBundle"
+  }  
 }

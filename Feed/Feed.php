@@ -13,7 +13,7 @@ class Feed
     /** @var \SimpleXMLElement  */
     private $rss;
 
-    public function __construct($feed)
+    public function __construct(string $feed)
    {
        $this->feed = $feed;
        $this->rss = simplexml_load_file($feed);
