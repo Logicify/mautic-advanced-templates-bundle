@@ -9,6 +9,7 @@ use Twig\Environment as Twig_Environment;
 use Twig\Loader\ChainLoader as Twig_Loader_Chain;
 use Twig\Loader\ArrayLoader as Twig_Loader_Array;
 use Twig\TwigFilter as Twig_SimpleFilter;
+use Twig\Error\Error as TwigError;
 
 class TemplateProcessor
 {
@@ -97,11 +98,22 @@ class TemplateProcessor
             $templateSource = $matches[1];
             // Uncomment to debug. This causes high memory usage with var_export.
             // $this->logger->debug('BLOCK SOURCE: ' . var_export($templateSource, true));
-            $template = $this->twigEnv->createTemplate($templateSource);
-            $renderedTemplate = $template->render([
-                'lead' => $lead,
-                'tokens' => $tokens
-            ]);
+            try{
+                $template = $this->twigEnv->createTemplate($templateSource);
+            }catch(\Exception $error){
+                $this->logger->error("Invalid syntax: ".$error->getMessage());
+                return '';
+            }
+
+            try{
+                $renderedTemplate = $template->render([
+                    'lead' => $lead,
+                    'tokens' => $tokens
+                ]);
+            }catch(\Exception $error){
+                $this->logger->error("Error render template: ".$error->getMessage());
+                return '';
+            }            
             // Uncomment to debug. This causes high memory usage with var_export.
             // $this->logger->debug('RENDERED BLOCK: ' . var_export($renderedTemplate, true));
             return $renderedTemplate;

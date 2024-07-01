@@ -8,7 +8,7 @@ use Mautic\LeadBundle\Model\LeadModel;
 class FeedFactory
 {
 
-    /** @var  string */
+    /** @var  Feed */
     private $feed;
 
     /** @var  string|null */
@@ -48,7 +48,5 @@ class FeedFactory
                 return $this->feed->getItems();
                 break;
         }
-
-
     }
 }

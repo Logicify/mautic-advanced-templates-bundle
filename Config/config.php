@@ -3,7 +3,7 @@
 return [
     'name'        => 'Advanced Templates',
     'description' => 'Plugin extends default email template capabilities with TWIG block so you can use advanced scripting techniques like conditions, loops etc',
-    'version'     => '1.2',
+    'version'     => '1.3.0',
     'author'      => 'Dmitry Berezovsky',
     'services' => [
         'events' => [
@@ -20,6 +20,7 @@ return [
                 'class'     => \MauticPlugin\MauticAdvancedTemplatesBundle\EventListener\SmsSubscriber::class,
                 'arguments' => [
                     'mautic.plugin.advanced_templates.helper.template_processor',
+                    'mautic.lead.model.lead',                    
                     'monolog.logger.mautic',
                 ]
             ]

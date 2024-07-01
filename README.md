@@ -15,7 +15,7 @@ This plugin was tested with:
 * Mautic v4.4.0
 * PHP v8.0
 
-There is a high probability it is compatible with other 5.x versions but it is untested. Will not work with versions lower than 4.x.
+There pluggin is compatible with other 5.x versions. Will not work with versions lower than 4.x.
 
 * Mautic 4.x - [Release 1.2](https://github.com/Logicify/mautic-advanced-templates-bundle/releases/tag/1.2)
 
@@ -225,6 +225,7 @@ Thanks goes to these wonderful people
  - [Ben U, bobsburgers](https://github.com/bobsburgers) - SMS implementation
  - [Felipe J. L. Rita, zerodois](https://github.com/zerodois) - Mautic 4.x compatibility
  - [Nick Pappas, radicand](https://github.com/radicand) - Arbritrary Send Mail API tokens
+ - [Pablo Veintimilla, pabloveintimilla](https://github.com/pabloveintimilla) - Mautic 5 support
 
 
 ## Disclaimer
